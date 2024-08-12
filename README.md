@@ -15,7 +15,7 @@ This is codes for "Automatic Image Unfolding and Stitching Framework for Esophag
 3. activate conda environment
    ```
    conda activate endostitching
-
+   ```
 
 ## Find depth center and unfolding the images
    run the depth_center.py. It will generate a json file to store all the coordinates of depth centers for each image.
