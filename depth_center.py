@@ -80,14 +80,7 @@ def get_image_names(folder_path):
                    file.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
     return natsorted(image_names)
-#
-# folder_path = r'/Data2/stitching/plane_img_small'
-# image_names = get_image_names(folder_path)
-#
-# rgbd_lis = get_rgbd(image_names)
 
-# img_1 = cv2.imread(r'C:\Users\xiongj6\Desktop\Depth-Anything\rgbd_images\1.tif')
-# loaded_image = cv2.imread("/Data2/stitching/plane_img_small/1.jpeg")
 
 
 def load_rgbd_image(file_path):
@@ -98,13 +91,7 @@ def load_rgbd_image(file_path):
     depth_image = rgbd_image[:, :, 3]  # Depth Channel
     return rgb_image, depth_image
 
-# Assuming 'depth_image' is your numpy array containing the depth data
-# and 'rgb_image' is the corresponding RGB image
-# file_path = r'/Data2/stitching/Depth-Anything/rgbd_images/1.npy'
-# _, depth_image = load_rgbd_image(file_path)
-# print(depth_image)
-# rgb_image = cv2.imread("/Data2/stitching/plane_img_small/1.jpeg")
-#############################################################################################3
+
 def calculate_mean_depth_point(depth_image, margin = 500):
     # Find the minimum depth value excluding the sides
 
@@ -116,101 +103,13 @@ def calculate_mean_depth_point(depth_image, margin = 500):
     mean_x = np.mean([x for x in min_locations[1] if margin < x < depth_image.shape[1] - margin])
     return int(mean_x), int(mean_y)
 
-# def plot_mean_point_on_image(image, mean_point):
-#     """ Plot the mean depth point on the image using a red circle. """
-#     cv2.circle(image, (mean_point[0], mean_point[1]), 2, (0, 0, 255), -1)  # Red circle
-#     return image
-# def process_images_and_display_results(folder_path, output_json='mean_depth_points_plane_img_small.json'):
-#     image_names = get_image_names(folder_path)
-#     depth_points = {}
-#
-#     with tqdm(total=len(image_names), desc="Processing Images", unit="image", leave=True) as pbar:
-#         for idx, image_path in enumerate(image_names):
-#             try:
-#                 ori_img = cv2.imread(image_path)
-#                 if ori_img is None:
-#                     raise ValueError(f"Unable to load image: {image_path}")
-#                 h, w = ori_img.shape[:2]
-#                 image = cv2.cvtColor(ori_img, cv2.COLOR_BGR2RGB) / 255.0
-#                 image = transform({'image': image})['image']
-#                 image = torch.from_numpy(image).unsqueeze(0)
-#
-#                 with torch.no_grad():
-#                     depth_img = depth_anything(image)
-#
-#                 depth_img_resized = F.interpolate(depth_img[None], (h, w), mode='bilinear', align_corners=False)[0, 0]
-#                 depth_img_uint8 = depth_img_resized.cpu().numpy().astype(np.uint8)
-#
-#                 mean_point = calculate_mean_depth_point(depth_img_uint8)
-#                 depth_points[image_path] = mean_point
-#
-#                 # Plot the mean point on the original image and display
-#                 # marked_image = plot_mean_point_on_image(ori_img, mean_point)
-#                 # plt.imshow(cv2.cvtColor(marked_image, cv2.COLOR_BGR2RGB))
-#                 plt.title(f"Processed: {os.path.basename(image_path)}")
-#                 # plt.show()
-#
-#                 pbar.update(1)
-#
-#             except Exception as e:
-#                 pbar.write(f"Error processing {image_path}: {str(e)}")
-#                 pbar.update(1)
-#
-#     # Optionally save the mean depth points to a JSON file
-#     with open(output_json, 'w') as json_file:
-#         json.dump(depth_points, json_file, indent=4)
-#
-#     print(f"Saved mean depth points to {output_json}")
-#
-# # Example usage
-# folder_path = r'/Data2/stitching/plane_img_small'
-# process_images_and_display_results(folder_path)
+
 
 def plot_mean_point_on_image(image, mean_point):
     """ Plot the mean depth point on the image using a red circle. """
     cv2.circle(image, (mean_point[0], mean_point[1]), 2, (0, 0, 255), -1)  # Red circle
     return image
-# def process_images_and_display_results(folder_path, output_json='/Data2/stitching/Dataset/extracted_dataset/mean_depth_points_CV_002_3.json'):
-#     image_names = get_image_names(folder_path)
-#     depth_points = {}
-#
-#     with tqdm(total=len(image_names), desc="Processing Images", unit="image", leave=True) as pbar:
-#         for idx, image_path in enumerate(image_names):
-#             try:
-#                 ori_img = cv2.imread(image_path)
-#                 if ori_img is None:
-#                     raise ValueError(f"Unable to load image: {image_path}")
-#                 h, w = ori_img.shape[:2]
-#                 image = cv2.cvtColor(ori_img, cv2.COLOR_BGR2RGB) / 255.0
-#                 image = transform({'image': image})['image']
-#                 image = torch.from_numpy(image).unsqueeze(0)
-#
-#                 with torch.no_grad():
-#                     depth_img = depth_anything(image)
-#
-#                 depth_img_resized = F.interpolate(depth_img[None], (h, w), mode='bilinear', align_corners=False)[0, 0]
-#                 depth_img_uint8 = depth_img_resized.cpu().numpy().astype(np.uint8)
-#
-#                 mean_point = calculate_mean_depth_point(depth_img_uint8)
-#                 depth_points[image_path] = mean_point
-#
-#                 # Plot the mean point on the original image and display
-#                 # marked_image = plot_mean_point_on_image(ori_img, mean_point)
-#                 # plt.imshow(cv2.cvtColor(marked_image, cv2.COLOR_BGR2RGB))
-#                 plt.title(f"Processed: {os.path.basename(image_path)}")
-#                 # plt.show()
-#
-#                 pbar.update(1)
-#
-#             except Exception as e:
-#                 pbar.write(f"Error processing {image_path}: {str(e)}")
-#                 pbar.update(1)
-#
-#     # Optionally save the mean depth points to a JSON file
-#     with open(output_json, 'w') as json_file:
-#         json.dump(depth_points, json_file, indent=4)
-#
-#     print(f"Saved mean depth points to {output_json}")
+
 def process_images_and_record_trajectory(folder_path, output_json='/Data2/stitching/Dataset/extracted_dataset/mean_depth_points_CV_004.json'):
     image_names = get_image_names(folder_path)
     depth_points = {}
