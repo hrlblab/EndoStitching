@@ -12,6 +12,24 @@ This is codes for "Automatic Image Unfolding and Stitching Framework for Esophag
    ```
    conda env create -f environment.yaml
    ```
+3. activate conda environment
+   ```
+   conda activate endostitching
 
-## 
+
+## Find depth center and unfolding the images
+   run the depth_center.py. It will generate a json file to store all the coordinates of depth centers for each image.
+   ```
+   python depth_center.py
+   ```
+   Find the json file you generate and unfold the images
+   ```
+   python unfolded.py
+   ```
+
+## Stitch the unfolded images
+   ```
+   python ponarama_test.py
+   ```
+
 
