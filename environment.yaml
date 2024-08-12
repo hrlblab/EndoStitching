@@ -1,4 +1,4 @@
-name: depthanything
+name: endostitching
 channels:
   - conda-forge
   - defaults
