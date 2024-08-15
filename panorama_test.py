@@ -352,4 +352,9 @@ if __name__ == "__main__":
         HomographyMatrix, _ = FindHomography(Matches, BaseImage_kp, SecImage_kp)
         StitchedImage, Correction, HomographyMatrix = StitchImages(BaseImage, Images[i], Correction, HomographyMatrix,
                                                                    horizontal_threshold)
+        BaseImage = StitchedImage.copy()
+
+        output_path = os.path.join(output_dir, f"Stitched_Panorama_{i}.png")
+        cv2.imwrite(output_path, BaseImage)
+
 
